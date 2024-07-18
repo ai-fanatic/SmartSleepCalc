@@ -1,0 +1,335 @@
+<html><head><base href="https://sleepoasis.net" /><title>SleepOasis - Smart Sleep Calculator</title><style>
+    :root {
+        --bg-color: #f0f8ff;
+        --text-color: #333;
+        --card-bg: white;
+        --header-bg: linear-gradient(135deg, #1e90ff, #4b0082);
+        --button-bg: #1e90ff;
+        --button-hover: #4169e1;
+        --option-bg: #e6f3ff;
+        --option-hover: #d0e8ff;
+    }
+    .dark-mode {
+        --bg-color: #1a1a2e;
+        --text-color: #e0e0e0;
+        --card-bg: #16213e;
+        --header-bg: linear-gradient(135deg, #0f3460, #950740);
+        --button-bg: #0f3460;
+        --button-hover: #16213e;
+        --option-bg: #1f4068;
+        --option-hover: #162447;
+    }
+    body {
+        font-family: 'Roboto', Arial, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-image: url('https://images.unsplash.com/photo-1455642305364-58f5c5f2c9d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    .container {
+        width: 90%;
+        max-width: 800px;
+        margin: auto;
+        overflow: hidden;
+        padding: 20px;
+    }
+    header {
+        background: var(--header-bg);
+        color: white;
+        padding: 30px 0;
+        text-align: center;
+        position: relative;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .calculator {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 30px;
+        margin-top: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        position: relative;
+    }
+    input[type="time"] {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+    button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background: var(--button-bg);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 20px;
+        transition: background 0.3s ease;
+    }
+    button:hover {
+        background: var(--button-hover);
+    }
+    #result {
+        margin-top: 30px;
+        font-size: 18px;
+        line-height: 1.8;
+    }
+    .time-option {
+        background: var(--option-bg);
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .time-option:hover {
+        background: var(--option-hover);
+    }
+    .suggested-time {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #1e90ff;
+    }
+    .cycle-info {
+        font-size: 0.9em;
+        color: #666;
+    }
+    .sleep-info {
+        margin-top: 40px;
+        background: var(--card-bg);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    h2, h3 {
+        color: #4b0082;
+    }
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+    .toggle-container {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+    }
+    .toggle-label {
+        margin-right: 10px;
+    }
+    #darkModeToggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(0,0,0,0.5);
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background 0.3s ease;
+        z-index: 1000;
+    }
+    #darkModeToggle:hover {
+        background: rgba(0,0,0,0.7);
+    }
+    .sound-options {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+    .sound-option {
+        text-align: center;
+        padding: 10px;
+        background: var(--option-bg);
+        border-radius: 8px;
+        transition: background 0.3s ease;
+    }
+    .sound-option:hover {
+        background: var(--option-hover);
+    }
+    .sound-option a {
+        color: var(--text-color);
+        text-decoration: none;
+    }
+</style></head><body>
+    <button id="darkModeToggle">🌙</button>
+    
+    <header>
+        <div class="container">
+            <h1>SleepOasis</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="calculator">
+            <h2>Smart Sleep Calculator</h2>
+            <div class="toggle-container">
+                <span class="toggle-label">Sleep</span>
+                <label class="switch">
+                    <input type="checkbox" id="toggleMode">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Wake</span>
+            </div>
+            <form id="sleep-form">
+                <div id="timeInputContainer">
+                    <label for="time-input">What time do you plan to sleep?</label>
+                    <input type="time" id="time-input" required>
+                </div>
+                <button type="submit">Calculate</button>
+            </form>
+            <div id="result"></div>
+        </div>
+
+        <div class="sleep-info">
+            <h3>Understanding Sleep Cycles</h3>
+            <p>Sleep cycles typically last about 90 minutes, and a full night's sleep usually consists of 4-6 cycles. Waking up at the end of a cycle often results in feeling more refreshed and alert.</p>
+            
+            <h3>Tips for Better Sleep</h3>
+            <ul>
+                <li>Maintain a consistent sleep schedule, even on weekends</li>
+                <li>Create a relaxing bedtime routine to wind down</li>
+                <li>Ensure your bedroom is dark, quiet, and cool</li>
+                <li>Avoid screens for at least an hour before bed</li>
+                <li>Limit caffeine and heavy meals close to bedtime</li>
+                <li>Exercise regularly, but not too close to bedtime</li>
+            </ul>
+            
+            <h3>Why Quality Sleep Matters</h3>
+            <p>Quality sleep is essential for overall health and well-being. It supports cognitive function, emotional regulation, physical recovery, and immune health. Consistently good sleep can improve mood, productivity, and reduce the risk of various health issues.</p>
+
+            <h3>Sleep Sounds</h3>
+            <div class="sound-options">
+                <div class="sound-option">
+                    <a href="https://www.youtube.com/watch?v=bP9gMpl1gyQ" target="_blank">🌧️ Rain Sounds</a>
+                </div>
+                <div class="sound-option">
+                    <a href="https://www.youtube.com/watch?v=wzjWIxXBs_s" target="_blank">🌊 Ocean Waves</a>
+                </div>
+                <div class="sound-option">
+                    <a href="https://www.youtube.com/watch?v=aXYtJB7Qslk" target="_blank">🎵 White Noise</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const toggleMode = document.getElementById('toggleMode');
+        const timeInputContainer = document.getElementById('timeInputContainer');
+        const timeInput = document.getElementById('time-input');
+        const sleepForm = document.getElementById('sleep-form');
+        const resultDiv = document.getElementById('result');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+
+        toggleMode.addEventListener('change', function() {
+            if (this.checked) {
+                timeInputContainer.innerHTML = '<label for="time-input">What time do you want to wake up?</label><input type="time" id="time-input" required>';
+            } else {
+                timeInputContainer.innerHTML = '<label for="time-input">What time do you plan to sleep?</label><input type="time" id="time-input" required>';
+            }
+        });
+
+        sleepForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const inputTime = document.getElementById('time-input').value;
+            const isWakeTime = toggleMode.checked;
+            
+            // Convert input time to minutes since midnight
+            const [hours, minutes] = inputTime.split(':').map(Number);
+            let timeInMinutes = hours * 60 + minutes;
+            
+            const cycleLength = 90; // minutes
+            let resultHTML = isWakeTime ? '<h3>Suggested Bedtimes:</h3>' : '<h3>Suggested Wake Times:</h3>';
+            
+            for (let cycles = 6; cycles >= 4; cycles--) {
+                let calculatedTimeMinutes;
+                if (isWakeTime) {
+                    calculatedTimeMinutes = timeInMinutes - (cycleLength * cycles);
+                    if (calculatedTimeMinutes < 0) calculatedTimeMinutes += 24 * 60;
+                } else {
+                    calculatedTimeMinutes = timeInMinutes + (cycleLength * cycles);
+                    if (calculatedTimeMinutes >= 24 * 60) calculatedTimeMinutes -= 24 * 60;
+                }
+                
+                const calculatedHours = Math.floor(calculatedTimeMinutes / 60);
+                const calculatedMinutes = calculatedTimeMinutes % 60;
+                
+                const formattedTime = `${calculatedHours.toString().padStart(2, '0')}:${calculatedMinutes.toString().padStart(2, '0')}`;
+                
+                resultHTML += `
+                    <div class="time-option">
+                        <span class="suggested-time">${formattedTime}</span>
+                        <span class="cycle-info">${cycles} sleep cycles (${cycles * 1.5} hours)</span>
+                    </div>
+                `;
+            }
+            
+            resultDiv.innerHTML = resultHTML;
+        });
+
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            this.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
+    </script>
+</body></html>
